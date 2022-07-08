@@ -6,10 +6,10 @@ public class InMemUsersRepository : IUsersRepository
 {
 	private readonly List<User> users = new()
 	{
-		new User {Id=Guid.NewGuid(),FirstName="Joe",LastName="Ali",Password="test1234",Role="admin"},
-		new User {Id=Guid.NewGuid(),FirstName="Mohamed",LastName="Ali",Password="test1234",Role="user"},
-		new User {Id=Guid.NewGuid(),FirstName="Khaled",LastName="Ali",Password="test1234",Role="user"},
-		new User {Id=Guid.NewGuid(),FirstName="Ali",LastName="Hassan",Password="test1234",Role="user"},
+		new User {Id=Guid.NewGuid(),FirstName="Joe",LastName="Ali",Email="joe@examle.com" , Password="test1234",Role="admin"},
+		new User {Id=Guid.NewGuid(),FirstName="Mohamed",LastName="Ali",Email="mohamed@example.com" ,Password="test1234",Role="user"},
+		new User {Id=Guid.NewGuid(),FirstName="Khaled",LastName="Ali",Email="khaled@example.com" ,Password="test1234",Role="user"},
+		new User {Id=Guid.NewGuid(),FirstName="Ali",LastName="Hassan",Email="ali@example.com" ,Password="test1234",Role="user"},
 	};
 
 

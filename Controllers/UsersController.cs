@@ -47,4 +47,29 @@ public class UsersController : ControllerBase
 	}
 
 
+	[HttpPost("signup")]
+	public async Task SignUp(CreateUSer user)
+	{
+		var HashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
+
+		var NewUser = new User
+		{
+			Id = Guid.NewGuid(),
+			FirstName = user.FirstName,
+			LastName = user.LastName,
+			Email = user.Email,
+			Password = HashedPassword,
+			Role = user.Role
+		};
+
+		await repository.CreateUserAsync(NewUser);
+
+		Response.StatusCode = 201;
+		await Response.WriteAsJsonAsync(new
+		{
+			status = "success",
+			data = NewUser
+		});
+	}
+
 }
