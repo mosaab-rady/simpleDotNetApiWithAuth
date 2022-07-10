@@ -1,6 +1,7 @@
 using Api.Entities;
 using Api.Repositories;
 using Api.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
@@ -17,9 +18,12 @@ public class UsersController : ControllerBase
 		this.repository = repository;
 	}
 
+
+	[Authorize]
 	[HttpGet]
 	public async Task GetAllUsers()
 	{
+
 		var users = await repository.GetAllUsersAsync();
 
 		Response.StatusCode = 200;
@@ -27,7 +31,7 @@ public class UsersController : ControllerBase
 		{
 			status = "success",
 			result = users.Count(),
-			data = users
+			data = users,
 		});
 	}
 
@@ -45,31 +49,4 @@ public class UsersController : ControllerBase
 			data = user
 		});
 	}
-
-
-	[HttpPost("signup")]
-	public async Task SignUp(CreateUSer user)
-	{
-		var HashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
-
-		var NewUser = new User
-		{
-			Id = Guid.NewGuid(),
-			FirstName = user.FirstName,
-			LastName = user.LastName,
-			Email = user.Email,
-			Password = HashedPassword,
-			Role = user.Role
-		};
-
-		await repository.CreateUserAsync(NewUser);
-
-		Response.StatusCode = 201;
-		await Response.WriteAsJsonAsync(new
-		{
-			status = "success",
-			data = NewUser
-		});
-	}
-
 }

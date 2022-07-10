@@ -1,6 +1,9 @@
+using System.Text;
 using System.Text.Json.Serialization;
 using Api.Repositories;
 using Api.Utils;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +12,25 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+
+
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+	options.TokenValidationParameters = new TokenValidationParameters()
+	{
+
+		ValidateAudience = true,
+		ValidateLifetime = true,
+		ValidateIssuerSigningKey = true,
+		ValidIssuer = builder.Configuration["JWT:Issuer"],
+		ValidAudience = builder.Configuration["JWT:Audience"],
+		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
+	};
+});
+
+builder.Services.AddAuthorization();
 
 
 
@@ -27,7 +49,8 @@ var app = builder.Build();
 
 // }
 
-// app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 

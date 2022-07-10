@@ -24,6 +24,12 @@ public class InMemUsersRepository : IUsersRepository
 		return await Task.FromResult(user);
 	}
 
+	public async Task<User> GetUserByEmailAsync(string Email)
+	{
+		var user = users.Where(x => x.Email == Email).SingleOrDefault();
+		return await Task.FromResult(user);
+	}
+
 	public async Task CreateUserAsync(User user)
 	{
 		users.Add(user);

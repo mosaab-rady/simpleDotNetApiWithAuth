@@ -38,7 +38,8 @@ public class ExceptionHandlerMiddleware
 					await response.WriteAsJsonAsync(new
 					{
 						status = "error",
-						message = "something went wrong!!!."
+						message = "something went wrong!!!.",
+						error = err.ToString()
 					});
 					break;
 			}
