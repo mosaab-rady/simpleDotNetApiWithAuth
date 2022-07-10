@@ -20,7 +20,7 @@ public class InMemProductsRepository : IProductsRepository
 
 
 
-	public async Task<Product?> GetProductAsync(Guid Id)
+	public async Task<Product> GetProductAsync(Guid Id)
 	{
 		var product = products.Where(x => x.Id == Id).SingleOrDefault();
 		return await Task.FromResult(product);

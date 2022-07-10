@@ -18,7 +18,7 @@ public class InMemUsersRepository : IUsersRepository
 		return await Task.FromResult(users);
 	}
 
-	public async Task<User?> GetUserAsync(Guid Id)
+	public async Task<User> GetUserAsync(Guid Id)
 	{
 		var user = users.Where(x => x.Id == Id).SingleOrDefault();
 		return await Task.FromResult(user);

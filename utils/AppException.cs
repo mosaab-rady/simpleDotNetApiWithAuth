@@ -4,17 +4,17 @@ namespace Api.Utils;
 public class AppException : Exception
 {
 
-	public string? status { get; }
+	public string status { get; }
 	public int statusCode { get; }
 	public AppException()
 	{
 	}
 
-	public AppException(string? message) : base(message)
+	public AppException(string message) : base(message)
 	{
 	}
 
-	public AppException(string? message, Exception? innerException) : base(message, innerException)
+	public AppException(string message, Exception innerException) : base(message, innerException)
 	{
 	}
 
