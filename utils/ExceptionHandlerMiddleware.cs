@@ -23,7 +23,6 @@ public class ExceptionHandlerMiddleware
 
 			switch (err)
 			{
-
 				case AppException e:
 					response.StatusCode = e.statusCode;
 					await response.WriteAsJsonAsync(new

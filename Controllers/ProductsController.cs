@@ -49,6 +49,8 @@ public class ProductsController : ControllerBase
 		});
 	}
 
+
+	[CustomAuthorize("admin")]
 	[HttpPost]
 	public async Task CreateProduct(CreateProduct _product)
 	{
@@ -69,6 +71,8 @@ public class ProductsController : ControllerBase
 	}
 
 
+
+	[CustomAuthorize("admin")]
 	[HttpPatch("{id}")]
 	public async Task UpdateProductById(Guid id, UpdateProduct _product)
 	{
@@ -94,6 +98,9 @@ public class ProductsController : ControllerBase
 	}
 
 
+
+
+	[CustomAuthorize("admin")]
 	[HttpDelete("{id}")]
 	public async Task DeleteProductById(Guid id)
 	{

@@ -1,6 +1,7 @@
 using Api.Entities;
 using Api.Repositories;
 using Api.Utils;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +20,6 @@ public class UsersController : ControllerBase
 	}
 
 
-	[Authorize]
 	[HttpGet]
 	public async Task GetAllUsers()
 	{
