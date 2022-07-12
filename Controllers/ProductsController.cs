@@ -17,23 +17,37 @@ public class ProductsController : ControllerBase
 		this.repository = _repository;
 	}
 
+	// [CustomAuthorize]
 	[HttpGet]
-	public async Task GetProductsAsync()
+	public async Task<OkObjectResult> GetProductsAsync()
 	{
 		var products = await repository.GetAllProductsAsync();
 
-		StatusCode(200);
-		await Response.WriteAsJsonAsync(new
+		return Ok(new
 		{
 			status = "success",
 			result = products.Count(),
 			data = products
 		});
+
+		// Response.ContentType = "application/json";
+		// return StatusCode(200, new
+		// {
+		// 	status = "success",
+		// 	result = products.Count(),
+		// 	data = products
+		// });
+		// await Response.WriteAsJsonAsync(new
+		// {
+		// 	status = "success",
+		// 	result = products.Count(),
+		// 	data = products
+		// });
 	}
 
 
 	[HttpGet("{id}")]
-	public async Task GetProductById(Guid id)
+	public async Task<OkObjectResult> GetProductById(Guid id)
 	{
 		var product = await repository.GetProductAsync(id);
 
@@ -41,18 +55,26 @@ public class ProductsController : ControllerBase
 		{
 			throw new AppException("No Product found with that ID.", "error", 404);
 		}
-		Response.StatusCode = 200;
-		await Response.WriteAsJsonAsync(new
+
+
+		return Ok(new
 		{
 			status = "success",
 			data = product
 		});
+
+		// Response.StatusCode = 200;
+		// await Response.WriteAsJsonAsync(new
+		// {
+		// 	status = "success",
+		// 	data = product
+		// });
 	}
 
 
 	[CustomAuthorize("admin")]
 	[HttpPost]
-	public async Task CreateProduct(CreateProduct _product)
+	public async Task<CreatedAtActionResult> CreateProduct(CreateProduct _product)
 	{
 		var product = new Product()
 		{
@@ -62,19 +84,26 @@ public class ProductsController : ControllerBase
 		};
 		await repository.CreateProductAsync(product);
 
-		Response.StatusCode = 201;
-		await Response.WriteAsJsonAsync(new
+
+		return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, new
 		{
 			status = "success",
 			data = product
 		});
+
+		// Response.StatusCode = 201;
+		// await Response.WriteAsJsonAsync(new
+		// {
+		// 	status = "success",
+		// 	data = product
+		// });
 	}
 
 
 
 	[CustomAuthorize("admin")]
 	[HttpPatch("{id}")]
-	public async Task UpdateProductById(Guid id, UpdateProduct _product)
+	public async Task<OkObjectResult> UpdateProductById(Guid id, UpdateProduct _product)
 	{
 		var product = await repository.GetProductAsync(id);
 		if (product is null)
@@ -88,13 +117,19 @@ public class ProductsController : ControllerBase
 
 		await repository.UpdateProductAsync(product);
 
-		// return Ok(product);
-		Response.StatusCode = 200;
-		await Response.WriteAsJsonAsync(new
+
+		return Ok(new
 		{
 			status = "success",
 			data = product
 		});
+
+		// Response.StatusCode = 200;
+		// await Response.WriteAsJsonAsync(new
+		// {
+		// 	status = "success",
+		// 	data = product
+		// });
 	}
 
 
@@ -102,7 +137,7 @@ public class ProductsController : ControllerBase
 
 	[CustomAuthorize("admin")]
 	[HttpDelete("{id}")]
-	public async Task DeleteProductById(Guid id)
+	public async Task<NoContentResult> DeleteProductById(Guid id)
 	{
 		var product = await repository.GetProductAsync(id);
 		if (product is null)
@@ -115,11 +150,14 @@ public class ProductsController : ControllerBase
 		await repository.DeleteProductAsync(id);
 
 		// return StatusCode(204);
-		Response.StatusCode = 204;
-		await Response.WriteAsJsonAsync(new
-		{
-			status = "success"
-		});
+
+		return NoContent();
+
+		// Response.StatusCode = 204;
+		// await Response.WriteAsJsonAsync(new
+		// {
+		// 	status = "success"
+		// });
 	}
 
 }

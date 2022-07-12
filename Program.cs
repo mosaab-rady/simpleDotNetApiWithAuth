@@ -16,21 +16,21 @@ builder.Services.AddEndpointsApiExplorer();
 
 
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-{
-	options.TokenValidationParameters = new TokenValidationParameters()
-	{
+// builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+// {
+// 	options.TokenValidationParameters = new TokenValidationParameters()
+// 	{
 
-		ValidateAudience = true,
-		ValidateLifetime = true,
-		ValidateIssuerSigningKey = true,
-		ValidIssuer = builder.Configuration["JWT:Issuer"],
-		ValidAudience = builder.Configuration["JWT:Audience"],
-		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
-	};
-});
+// 		ValidateAudience = true,
+// 		ValidateLifetime = true,
+// 		ValidateIssuerSigningKey = true,
+// 		ValidIssuer = builder.Configuration["JWT:Issuer"],
+// 		ValidAudience = builder.Configuration["JWT:Audience"],
+// 		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
+// 	};
+// });
 
-builder.Services.AddAuthorization();
+// builder.Services.AddAuthorization();
 
 
 
@@ -43,16 +43,19 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
+app.UseExceptionHandler("/error");
+
+
 // Configure the HTTP request pipeline.
 // if (app.Environment.IsDevelopment())
 // {
 
 // }
 
-app.UseAuthentication();
-app.UseAuthorization();
+// app.UseAuthentication();
+// app.UseAuthorization();
 
-app.UseMiddleware<ExceptionHandlerMiddleware>();
+// app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseMiddleware<JwtMiddleware>();
 

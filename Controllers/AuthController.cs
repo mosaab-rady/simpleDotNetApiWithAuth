@@ -25,7 +25,7 @@ public class AuthController : ControllerBase
 
 
 	[HttpPost("signup")]
-	public async Task SignUp(CreateUSer user)
+	public async Task<CreatedAtActionResult> SignUp(CreateUSer user)
 	{
 		var HashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
@@ -41,18 +41,27 @@ public class AuthController : ControllerBase
 
 		await repository.CreateUserAsync(NewUser);
 
-		Response.StatusCode = 201;
-		await Response.WriteAsJsonAsync(new
+		string token = createToken(NewUser);
+
+		return CreatedAtAction("signup", new
 		{
 			status = "success",
+			token,
 			data = user
 		});
+
+		// Response.StatusCode = 201;
+		// await Response.WriteAsJsonAsync(new
+		// {
+		// 	status = "success",
+		// 	data = user
+		// });
 	}
 
 
 
 	[HttpPost("login")]
-	public async Task Login(LoginUser _user)
+	public async Task<OkObjectResult> Login(LoginUser _user)
 	{
 		var user = await repository.GetUserByEmailAsync(_user.Email);
 
@@ -61,12 +70,30 @@ public class AuthController : ControllerBase
 			throw new AppException("Encorrect Email OR Password", "fail", 400);
 		}
 
+		string tokenString = createToken(user);
+
+
+		return Ok(new
+		{
+			status = "success",
+			data = tokenString
+		});
+
+		// Response.StatusCode = 200;
+		// await Response.WriteAsJsonAsync(new
+		// {
+		// 	status = "success",
+		// 	data = tokenString
+		// });
+
+	}
+
+
+	private string createToken(User user)
+	{
 		var claims = new[]
-				{
+						{
 						new Claim("Id",user.Id.ToString()),
-						new Claim(ClaimTypes.NameIdentifier, user.FirstName),
-						new Claim("Email", user.Email),
-						new Claim(ClaimTypes.Role, user.Role)
 				};
 
 
@@ -84,32 +111,9 @@ public class AuthController : ControllerBase
 
 		var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-		Response.Cookies.Append("jwt", tokenString);
+		// Response.Cookies.Append("jwt", tokenString);
 
-		Response.StatusCode = 200;
-		await Response.WriteAsJsonAsync(new
-		{
-			status = "success",
-			data = tokenString
-		});
-
+		return tokenString;
 	}
-
-
-	// private async Task CreateSendCookie(User user, int statusCode)
-	// {
-	// 	Response.Cookies.Append("jwt", "super_secret_token");
-
-
-	// 	Response.StatusCode = statusCode;
-	// 	await Response.WriteAsJsonAsync(new
-	// 	{
-	// 		status = "success",
-	// 		data = user
-	// 	});
-
-	// }
-
-
 
 }

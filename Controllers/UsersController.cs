@@ -21,32 +21,45 @@ public class UsersController : ControllerBase
 
 
 	[HttpGet]
-	public async Task GetAllUsers()
+	public async Task<OkObjectResult> GetAllUsers()
 	{
 
 		var users = await repository.GetAllUsersAsync();
 
-		Response.StatusCode = 200;
-		await Response.WriteAsJsonAsync(new
+		return Ok(new
 		{
 			status = "success",
 			result = users.Count(),
 			data = users,
 		});
+
+		// Response.StatusCode = 200;
+		// await Response.WriteAsJsonAsync(new
+		// {
+		// 	status = "success",
+		// 	result = users.Count(),
+		// 	data = users,
+		// });
 	}
 
 
 	[HttpGet("{id}")]
-	public async Task GetUserById(Guid id)
+	public async Task<OkObjectResult> GetUserById(Guid id)
 	{
 		var user = await repository.GetUserAsync(id);
 		if (user is null) throw new AppException("No user found with that ID.", "fail", 404);
 
-		Response.StatusCode = 200;
-		await Response.WriteAsJsonAsync(new
+		return Ok(new
 		{
 			status = "success",
 			data = user
 		});
+
+		// Response.StatusCode = 200;
+		// await Response.WriteAsJsonAsync(new
+		// {
+		// 	status = "success",
+		// 	data = user
+		// });
 	}
 }

@@ -55,7 +55,6 @@ public class JwtMiddleware
 			var jwtToken = (JwtSecurityToken)validatedToken;
 
 
-			var email = jwtToken.Claims.First(claim => claim.Type == "Email").Value;
 
 			var Id = jwtToken.Claims.First(claim => claim.Type == "Id").Value;
 
