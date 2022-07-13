@@ -61,13 +61,14 @@ public class AuthController : ControllerBase
 
 
 	[HttpPost("login")]
-	public async Task<OkObjectResult> Login(LoginUser _user)
+	public async Task<IActionResult> Login(LoginUser _user)
 	{
 		var user = await repository.GetUserByEmailAsync(_user.Email);
 
 		if (user == null || !BCrypt.Net.BCrypt.Verify(_user.Password, user.Password))
 		{
-			throw new AppException("Encorrect Email OR Password", "fail", 400);
+			return BadRequest(new { status = "fail", title = "Encorrect Email OR Password." });
+			// throw new AppException("Encorrect Email OR Password", "fail", 400);
 		}
 
 		string tokenString = createToken(user);

@@ -44,10 +44,13 @@ public class UsersController : ControllerBase
 
 
 	[HttpGet("{id}")]
-	public async Task<OkObjectResult> GetUserById(Guid id)
+	public async Task<IActionResult> GetUserById(Guid id)
 	{
 		var user = await repository.GetUserAsync(id);
-		if (user is null) throw new AppException("No user found with that ID.", "fail", 404);
+
+		if (user is null)
+			return NotFound(new { status = "fail", title = "No user found with that ID." });
+		// throw new AppException("No user found with that ID.", "fail", 404);
 
 		return Ok(new
 		{

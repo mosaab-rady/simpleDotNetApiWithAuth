@@ -47,13 +47,14 @@ public class ProductsController : ControllerBase
 
 
 	[HttpGet("{id}")]
-	public async Task<OkObjectResult> GetProductById(Guid id)
+	public async Task<IActionResult> GetProductById(Guid id)
 	{
 		var product = await repository.GetProductAsync(id);
 
 		if (product is null)
 		{
-			throw new AppException("No Product found with that ID.", "error", 404);
+			return NotFound(new { status = "fail", title = "No product found with that ID." });
+			// throw new AppException("No Product found with that ID.", "error", 404);
 		}
 
 
@@ -103,13 +104,13 @@ public class ProductsController : ControllerBase
 
 	[CustomAuthorize("admin")]
 	[HttpPatch("{id}")]
-	public async Task<OkObjectResult> UpdateProductById(Guid id, UpdateProduct _product)
+	public async Task<IActionResult> UpdateProductById(Guid id, UpdateProduct _product)
 	{
 		var product = await repository.GetProductAsync(id);
 		if (product is null)
 		{
-			// return NotFound("No product found with that ID.");
-			throw new AppException("No product found with that ID.", "fail", 404);
+			return NotFound(new { status = "fail", title = "No product found with that ID." });
+			// throw new AppException("No product found with that ID.", "fail", 404);
 		}
 
 		product.Name = _product.Name;
@@ -137,12 +138,12 @@ public class ProductsController : ControllerBase
 
 	[CustomAuthorize("admin")]
 	[HttpDelete("{id}")]
-	public async Task<NoContentResult> DeleteProductById(Guid id)
+	public async Task<IActionResult> DeleteProductById(Guid id)
 	{
 		var product = await repository.GetProductAsync(id);
 		if (product is null)
 		{
-			// return NotFound();
+			return NotFound(new { status = "fail", title = "No product found with that ID." });
 			throw new AppException("No product found with that ID.", "fail", 404);
 
 		}
