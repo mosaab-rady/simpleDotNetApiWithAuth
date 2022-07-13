@@ -57,7 +57,7 @@ app.UseExceptionHandler("/error");
 
 // app.UseMiddleware<ExceptionHandlerMiddleware>();
 
-app.UseMiddleware<JwtMiddleware>();
+// app.UseMiddleware<JwtMiddleware>();
 
 
 app.MapControllers();

@@ -1,5 +1,11 @@
 namespace Api.Utils;
 
+
+/// <summary>
+///		global error handler
+/// 	this middleware is not used but instead the (app.useExceptionHandler("/error")) middleware is used
+/// </summary>
+
 public class ExceptionHandlerMiddleware
 {
 	private readonly RequestDelegate _next;

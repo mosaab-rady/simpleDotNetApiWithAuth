@@ -28,7 +28,6 @@ public class UsersController : ControllerBase
 
 		return Ok(new
 		{
-			status = "success",
 			result = users.Count(),
 			data = users,
 		});
@@ -49,12 +48,11 @@ public class UsersController : ControllerBase
 		var user = await repository.GetUserAsync(id);
 
 		if (user is null)
-			return NotFound(new { status = "fail", title = "No user found with that ID." });
+			return NotFound(new { title = "No user found with that ID." });
 		// throw new AppException("No user found with that ID.", "fail", 404);
 
 		return Ok(new
 		{
-			status = "success",
 			data = user
 		});
 

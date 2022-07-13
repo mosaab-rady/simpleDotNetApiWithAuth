@@ -45,17 +45,9 @@ public class AuthController : ControllerBase
 
 		return CreatedAtAction("signup", new
 		{
-			status = "success",
 			token,
 			data = user
 		});
-
-		// Response.StatusCode = 201;
-		// await Response.WriteAsJsonAsync(new
-		// {
-		// 	status = "success",
-		// 	data = user
-		// });
 	}
 
 
@@ -67,7 +59,7 @@ public class AuthController : ControllerBase
 
 		if (user == null || !BCrypt.Net.BCrypt.Verify(_user.Password, user.Password))
 		{
-			return BadRequest(new { status = "fail", title = "Encorrect Email OR Password." });
+			return BadRequest(new { title = "Encorrect Email OR Password." });
 			// throw new AppException("Encorrect Email OR Password", "fail", 400);
 		}
 
@@ -76,17 +68,19 @@ public class AuthController : ControllerBase
 
 		return Ok(new
 		{
-			status = "success",
 			data = tokenString
 		});
+	}
 
-		// Response.StatusCode = 200;
-		// await Response.WriteAsJsonAsync(new
-		// {
-		// 	status = "success",
-		// 	data = tokenString
-		// });
 
+	[HttpPost("logout")]
+	[TypeFilter(typeof(ProtectAttribute))]
+	public IActionResult logout()
+	{
+		// HttpContext.Items["User"] = null;
+		Response.Cookies.Delete("jwt");
+
+		return Ok();
 	}
 
 
@@ -112,7 +106,16 @@ public class AuthController : ControllerBase
 
 		var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-		// Response.Cookies.Append("jwt", tokenString);
+
+
+		var cookieOptions = new CookieOptions()
+		{
+			HttpOnly = true,
+			Expires = DateTimeOffset.Now.AddHours(1)
+		};
+
+
+		Response.Cookies.Append("jwt", tokenString, cookieOptions);
 
 		return tokenString;
 	}

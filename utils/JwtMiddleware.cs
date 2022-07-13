@@ -5,6 +5,14 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Api.Utils;
 
+
+
+/// <summary>
+/// used to capture the token, 
+/// It is global so even if the route does not use authorize the request will have a user,
+/// It`s not used instead Protect Attribute is used
+/// </summary>
+
 public class JwtMiddleware
 {
 	private readonly RequestDelegate _next;

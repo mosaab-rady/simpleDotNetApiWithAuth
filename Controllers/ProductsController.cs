@@ -19,13 +19,14 @@ public class ProductsController : ControllerBase
 
 	// [CustomAuthorize]
 	[HttpGet]
+	[TypeFilter(typeof(ProtectAttribute))]
+	// [RestrictTo("admin")]
 	public async Task<OkObjectResult> GetProductsAsync()
 	{
 		var products = await repository.GetAllProductsAsync();
 
 		return Ok(new
 		{
-			status = "success",
 			result = products.Count(),
 			data = products
 		});
@@ -53,14 +54,13 @@ public class ProductsController : ControllerBase
 
 		if (product is null)
 		{
-			return NotFound(new { status = "fail", title = "No product found with that ID." });
+			return NotFound(new { type = "fail", title = "No product found with that ID." });
 			// throw new AppException("No Product found with that ID.", "error", 404);
 		}
 
 
 		return Ok(new
 		{
-			status = "success",
 			data = product
 		});
 
@@ -73,8 +73,10 @@ public class ProductsController : ControllerBase
 	}
 
 
-	[CustomAuthorize("admin")]
+	// [CustomAuthorize("admin")]
 	[HttpPost]
+	[TypeFilter(typeof(ProtectAttribute))]
+	[RestrictTo("admin")]
 	public async Task<CreatedAtActionResult> CreateProduct(CreateProduct _product)
 	{
 		var product = new Product()
@@ -88,7 +90,6 @@ public class ProductsController : ControllerBase
 
 		return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, new
 		{
-			status = "success",
 			data = product
 		});
 
@@ -102,14 +103,16 @@ public class ProductsController : ControllerBase
 
 
 
-	[CustomAuthorize("admin")]
+	// [CustomAuthorize("admin")]
 	[HttpPatch("{id}")]
+	[TypeFilter(typeof(ProtectAttribute))]
+	[RestrictTo("admin")]
 	public async Task<IActionResult> UpdateProductById(Guid id, UpdateProduct _product)
 	{
 		var product = await repository.GetProductAsync(id);
 		if (product is null)
 		{
-			return NotFound(new { status = "fail", title = "No product found with that ID." });
+			return NotFound(new { title = "No product found with that ID." });
 			// throw new AppException("No product found with that ID.", "fail", 404);
 		}
 
@@ -121,7 +124,6 @@ public class ProductsController : ControllerBase
 
 		return Ok(new
 		{
-			status = "success",
 			data = product
 		});
 
@@ -136,14 +138,16 @@ public class ProductsController : ControllerBase
 
 
 
-	[CustomAuthorize("admin")]
+	// [CustomAuthorize("admin")]
 	[HttpDelete("{id}")]
+	[TypeFilter(typeof(ProtectAttribute))]
+	[RestrictTo("admin")]
 	public async Task<IActionResult> DeleteProductById(Guid id)
 	{
 		var product = await repository.GetProductAsync(id);
 		if (product is null)
 		{
-			return NotFound(new { status = "fail", title = "No product found with that ID." });
+			return NotFound(new { title = "No product found with that ID." });
 			throw new AppException("No product found with that ID.", "fail", 404);
 
 		}

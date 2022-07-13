@@ -9,6 +9,14 @@ public class CustomAuthorizeAttribute : Attribute, IAuthorizationFilter
 
 
 	public string[] Roles { get; set; }
+
+	/// <summary>
+	/// custom authorization attribute
+	/// used along with JWT middleware
+	/// It is not used
+	/// instead protect and restrictTo attibute is being used
+	/// </summary>
+
 	public CustomAuthorizeAttribute(params string[] Role)
 	{
 		this.Roles = Role;

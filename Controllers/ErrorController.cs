@@ -21,15 +21,8 @@ public class ErrorController : ControllerBase
 			return Problem(
 				statusCode: err.statusCode,
 				 title: err.Message,
-					detail: err.StackTrace,
-					 type: err.status);
-			// Response.StatusCode = err.statusCode;
-			// await Response.WriteAsJsonAsync(new
-			// {
-			// 	status = err.status,
-			// 	title = err.Message,
-			// 	detail = err.StackTrace
-			// });
+					detail: err.StackTrace
+					 );
 		}
 		else
 		{
@@ -39,15 +32,6 @@ public class ErrorController : ControllerBase
 				statusCode: 500,
 				 title: err.Message,
 					detail: err.StackTrace);
-
-			// Response.StatusCode = 500;
-			// await Response.WriteAsJsonAsync(new
-			// {
-			// 	status = "error",
-			// 	title = "something went wrong",
-			// 	detail = err.StackTrace,
-			// 	message = err.Message
-			// });
 		}
 
 		// return Problem(
