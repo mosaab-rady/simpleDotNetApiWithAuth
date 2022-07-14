@@ -35,7 +35,7 @@ public class PostgresUsersRepository : IUsersRepository
 
 	public async Task<User> GetUserByEmailAsync(string Email)
 	{
-		var user = await _context.Users.SingleAsync(_ => _.Email == Email);
+		var user = await _context.Users.SingleOrDefaultAsync(_ => _.Email == Email);
 
 		return user;
 	}
