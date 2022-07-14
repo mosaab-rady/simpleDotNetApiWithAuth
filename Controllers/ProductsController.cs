@@ -17,10 +17,7 @@ public class ProductsController : ControllerBase
 		this.repository = _repository;
 	}
 
-	// [CustomAuthorize]
 	[HttpGet]
-	[TypeFilter(typeof(ProtectAttribute))]
-	// [RestrictTo("admin")]
 	public async Task<OkObjectResult> GetProductsAsync()
 	{
 		var products = await repository.GetAllProductsAsync();
@@ -30,20 +27,6 @@ public class ProductsController : ControllerBase
 			result = products.Count(),
 			data = products
 		});
-
-		// Response.ContentType = "application/json";
-		// return StatusCode(200, new
-		// {
-		// 	status = "success",
-		// 	result = products.Count(),
-		// 	data = products
-		// });
-		// await Response.WriteAsJsonAsync(new
-		// {
-		// 	status = "success",
-		// 	result = products.Count(),
-		// 	data = products
-		// });
 	}
 
 
@@ -55,25 +38,15 @@ public class ProductsController : ControllerBase
 		if (product is null)
 		{
 			return NotFound(new { type = "fail", title = "No product found with that ID." });
-			// throw new AppException("No Product found with that ID.", "error", 404);
 		}
-
 
 		return Ok(new
 		{
 			data = product
 		});
-
-		// Response.StatusCode = 200;
-		// await Response.WriteAsJsonAsync(new
-		// {
-		// 	status = "success",
-		// 	data = product
-		// });
 	}
 
 
-	// [CustomAuthorize("admin")]
 	[HttpPost]
 	[TypeFilter(typeof(ProtectAttribute))]
 	[RestrictTo("admin")]
@@ -85,25 +58,17 @@ public class ProductsController : ControllerBase
 			Name = _product.Name,
 			Price = _product.Price,
 		};
-		await repository.CreateProductAsync(product);
 
+		await repository.CreateProductAsync(product);
 
 		return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, new
 		{
 			data = product
 		});
-
-		// Response.StatusCode = 201;
-		// await Response.WriteAsJsonAsync(new
-		// {
-		// 	status = "success",
-		// 	data = product
-		// });
 	}
 
 
 
-	// [CustomAuthorize("admin")]
 	[HttpPatch("{id}")]
 	[TypeFilter(typeof(ProtectAttribute))]
 	[RestrictTo("admin")]
@@ -113,7 +78,6 @@ public class ProductsController : ControllerBase
 		if (product is null)
 		{
 			return NotFound(new { title = "No product found with that ID." });
-			// throw new AppException("No product found with that ID.", "fail", 404);
 		}
 
 		product.Name = _product.Name;
@@ -121,24 +85,15 @@ public class ProductsController : ControllerBase
 
 		await repository.UpdateProductAsync(product);
 
-
 		return Ok(new
 		{
 			data = product
 		});
-
-		// Response.StatusCode = 200;
-		// await Response.WriteAsJsonAsync(new
-		// {
-		// 	status = "success",
-		// 	data = product
-		// });
 	}
 
 
 
 
-	// [CustomAuthorize("admin")]
 	[HttpDelete("{id}")]
 	[TypeFilter(typeof(ProtectAttribute))]
 	[RestrictTo("admin")]
@@ -148,21 +103,11 @@ public class ProductsController : ControllerBase
 		if (product is null)
 		{
 			return NotFound(new { title = "No product found with that ID." });
-			throw new AppException("No product found with that ID.", "fail", 404);
-
 		}
 
 		await repository.DeleteProductAsync(id);
 
-		// return StatusCode(204);
-
 		return NoContent();
-
-		// Response.StatusCode = 204;
-		// await Response.WriteAsJsonAsync(new
-		// {
-		// 	status = "success"
-		// });
 	}
 
 }

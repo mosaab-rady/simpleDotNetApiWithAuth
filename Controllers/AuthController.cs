@@ -60,7 +60,6 @@ public class AuthController : ControllerBase
 		if (user == null || !BCrypt.Net.BCrypt.Verify(_user.Password, user.Password))
 		{
 			return BadRequest(new { title = "Encorrect Email OR Password." });
-			// throw new AppException("Encorrect Email OR Password", "fail", 400);
 		}
 
 		string tokenString = createToken(user);
@@ -77,7 +76,6 @@ public class AuthController : ControllerBase
 	[TypeFilter(typeof(ProtectAttribute))]
 	public IActionResult logout()
 	{
-		// HttpContext.Items["User"] = null;
 		Response.Cookies.Delete("jwt");
 
 		return Ok();

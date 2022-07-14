@@ -31,14 +31,6 @@ public class UsersController : ControllerBase
 			result = users.Count(),
 			data = users,
 		});
-
-		// Response.StatusCode = 200;
-		// await Response.WriteAsJsonAsync(new
-		// {
-		// 	status = "success",
-		// 	result = users.Count(),
-		// 	data = users,
-		// });
 	}
 
 
@@ -49,18 +41,10 @@ public class UsersController : ControllerBase
 
 		if (user is null)
 			return NotFound(new { title = "No user found with that ID." });
-		// throw new AppException("No user found with that ID.", "fail", 404);
 
 		return Ok(new
 		{
 			data = user
 		});
-
-		// Response.StatusCode = 200;
-		// await Response.WriteAsJsonAsync(new
-		// {
-		// 	status = "success",
-		// 	data = user
-		// });
 	}
 }

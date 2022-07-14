@@ -1,8 +1,10 @@
 using System.Text;
 using System.Text.Json.Serialization;
+using Api.Context;
 using Api.Repositories;
 using Api.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,8 +38,23 @@ builder.Services.AddEndpointsApiExplorer();
 
 // DI
 {
-	builder.Services.AddSingleton<IProductsRepository, InMemProductsRepository>();
-	builder.Services.AddSingleton<IUsersRepository, InMemUsersRepository>();
+	/// <summary>
+	// it has to be scoped instead of singleton
+	// beacause addDbcontext is scoped
+	/// </summary>
+	builder.Services.AddScoped<IProductsRepository, PostgresProductsRepository>();
+	// builder.Services.AddSingleton<IProductsRepository, InMemProductsRepository>();
+	builder.Services.AddScoped<IUsersRepository, PostgresUsersRepository>();
+	// builder.Services.AddSingleton<IUsersRepository, InMemUsersRepository>();
+
+	// postgres database configurations
+	builder.Services.AddDbContext<PostgresApiContext>(options =>
+	options
+			.UseNpgsql(builder.Configuration.GetConnectionString("ApiContext"))
+			.UseSnakeCaseNamingConvention()
+			.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
+			.EnableSensitiveDataLogging()
+	);
 }
 
 

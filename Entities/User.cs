@@ -1,9 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api.Entities;
 
-
+[Index(nameof(Email), IsUnique = true)]
 public class User
 {
 	[Required]
