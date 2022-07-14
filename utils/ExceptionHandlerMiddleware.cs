@@ -6,21 +6,13 @@ namespace Api.Utils;
 /// 	this middleware is not used but instead the (app.useExceptionHandler("/error")) middleware is used
 /// </summary>
 
-public class ExceptionHandlerMiddleware
+public class ExceptionHandlerMiddleware : IMiddleware
 {
-	private readonly RequestDelegate _next;
-
-	public ExceptionHandlerMiddleware(RequestDelegate next)
-	{
-		_next = next;
-	}
-
-
-	public async Task Invoke(HttpContext context)
+	public async Task InvokeAsync(HttpContext context, RequestDelegate next)
 	{
 		try
 		{
-			await _next.Invoke(context);
+			await next(context);
 
 		}
 		catch (Exception err)
@@ -30,6 +22,7 @@ public class ExceptionHandlerMiddleware
 			switch (err)
 			{
 				case AppException e:
+
 					response.StatusCode = e.statusCode;
 					await response.WriteAsJsonAsync(new
 					{
@@ -48,9 +41,6 @@ public class ExceptionHandlerMiddleware
 					});
 					break;
 			}
-
-
 		}
 	}
-
 }

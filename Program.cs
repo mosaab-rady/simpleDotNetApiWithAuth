@@ -47,6 +47,9 @@ builder.Services.AddEndpointsApiExplorer();
 	builder.Services.AddScoped<IUsersRepository, PostgresUsersRepository>();
 	// builder.Services.AddSingleton<IUsersRepository, InMemUsersRepository>();
 
+	// required if using exception middleware
+	// builder.Services.AddTransient<ExceptionHandlerMiddleware>();
+
 	// postgres database configurations
 	builder.Services.AddDbContext<PostgresApiContext>(options =>
 	options
